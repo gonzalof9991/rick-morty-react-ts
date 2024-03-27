@@ -1,0 +1,30 @@
+const headers = {
+    'Content-Type': 'application/json',
+};
+
+
+const get = async <T>(url: string) => {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers,
+    });
+
+    return await response.json() as T;
+};
+
+
+const post = async <T>(url: string, body: any) => {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+    });
+
+    return await response.json() as T;
+};
+
+
+export const http = {
+    get,
+    post,
+};
