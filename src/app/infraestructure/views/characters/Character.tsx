@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Data} from "../../../domain/models/Data.ts";
 import {DataService} from "../../../domain/services/data.service.ts";
 import Card from "./Card.tsx";
-import ButtonPage from "./ButtonPage.tsx";
+import ButtonPage from "../../components/buttons/ButtonPage.tsx";
 
 export default function Character() {
     const [data, setData] = useState<Data | null>(null);
@@ -31,8 +31,8 @@ export default function Character() {
     return (
         <>
             <div className={'flex justify-center items-center gap-x-4 mb-4'}>
-                <ButtonPage onClick={handlePage} url={data?.info?.prev} text={'Previous'}/>
-                <ButtonPage onClick={handlePage} url={data?.info?.next} text={'Next'}/>
+                <ButtonPage onClick={handlePage} url={data?.info?.prev} text={'Previous'} />
+                <ButtonPage onClick={handlePage} url={data?.info?.next} text={'Next'} />
             </div>
             <ul className={'grid grid-cols-3 gap-6'}>
                 {
