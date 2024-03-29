@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import {Data} from "../../../domain/models/Data.ts";
-import {DataService} from "../../../domain/services/data.service.ts";
+import {CharacterService} from "../../../domain/services/character.service.ts";
 import Card from "./Card.tsx";
 import ButtonPage from "../../components/buttons/ButtonPage.tsx";
+import Search from "../../components/forms/Search.tsx";
 
 export default function Character() {
     const [data, setData] = useState<Data | null>(null);
@@ -13,15 +14,24 @@ export default function Character() {
             setSkeleton(value);
         }, ms);
     };
+    const handleSearch = (characters: Data) => {
+        if (characters.results.length === 0) {
+            alert('No results found');
+            return;
+        }
+        changeSkeleton(true, 0);
+        setData(characters);
+        changeSkeleton(false, 2000);
+    };
     const handlePage = (url: string) => {
         changeSkeleton(true, 0);
-        DataService.getPage(url).then(setData)
+        CharacterService.getPage(url).then(setData)
             .finally(() => {
                 changeSkeleton(false, 2000);
             });
     };
     useEffect(() => {
-        DataService.getData().then((data) => {
+        CharacterService.getAll().then((data) => {
             setData(data);
         })
             .finally(() => {
@@ -31,8 +41,14 @@ export default function Character() {
     return (
         <>
             <div className={'flex justify-center items-center gap-x-4 mb-4'}>
-                <ButtonPage onClick={handlePage} url={data?.info?.prev} text={'Previous'} />
-                <ButtonPage onClick={handlePage} url={data?.info?.next} text={'Next'} />
+                <Search<Data> postSearch={CharacterService.getParams} onSearch={handleSearch} queryParams={'?name='}
+                              placeholder={'Search by name'}/>
+                <Search<Data> postSearch={CharacterService.getParams} onSearch={handleSearch} queryParams={'?status='}
+                              placeholder={'Search by status'}/>
+                <Search<Data> postSearch={CharacterService.getParams} onSearch={handleSearch} queryParams={'?gender='}
+                              placeholder={'Search by gender'}/>
+                <ButtonPage onClick={handlePage} url={data?.info?.prev || ''} text={'Previous'}/>
+                <ButtonPage onClick={handlePage} url={data?.info?.next || ''} text={'Next'}/>
             </div>
             <ul className={'grid grid-cols-3 gap-6'}>
                 {
