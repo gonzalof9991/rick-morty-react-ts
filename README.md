@@ -1,30 +1,28 @@
-# React + TypeScript + Vite
+# Implementación de Arquitectura Hexagonal con React y TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una implementación práctica de la arquitectura hexagonal, también conocida como arquitectura de puertos y adaptadores, utilizando React con TypeScript. El objetivo es crear componentes genéricos y reutilizables que interactúen con la API de Rick y Morty, permitiendo búsquedas y navegación paginada.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Arquitectura Hexagonal**: Aplicación de los conceptos de puertos y adaptadores para garantizar una separación clara entre la lógica de negocio y la infraestructura.
+- **Componentes Genéricos**: Desarrollo de componentes reutilizables que se pueden adaptar a diferentes tipos de datos y comportamientos.
+- **Búsqueda y Paginación**: Funcionalidad integrada para buscar y navegar entre los datos de la API de Rick y Morty.
+- **Principios SOLID y DRY**: El código sigue los principios de diseño SOLID para fomentar una arquitectura mantenible y extensible, evitando la repetición para cumplir con el principio "Don't Repeat Yourself" (DRY).
+- **Componentes Adaptables**: Los componentes están diseñados para ser flexibles y se pueden adaptar a diferentes contextos y necesidades.
 
-## Expanding the ESLint configuration
+## Iniciar el Proyecto
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Para iniciar el proyecto, sigue estos pasos:
 
-- Configure the top-level `parserOptions` property like this:
+```bash
+# Clona el repositorio
+git clone https://tu-repositorio.git
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+# Navega al directorio del proyecto
+cd nombre-de-tu-proyecto
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# Instala las dependencias
+npm install
+
+# Inicia la aplicación en modo de desarrollo
+npm start

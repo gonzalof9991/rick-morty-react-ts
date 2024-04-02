@@ -1,4 +1,5 @@
-import {FilterContextType} from "../../infraestructure/views/Characters/CharacterContext.tsx";
+import {FilterContextType} from "../../infraestructure/components/Visualizer/VisualizerContext.tsx";
+
 
 export const buildUrl = (urls: FilterContextType[]) => {
     const url = urls.reduce((acc, filter) => {
