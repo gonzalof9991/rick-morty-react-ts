@@ -1,4 +1,4 @@
-import {Info} from "./Info.ts";
+import {Info} from "../Info.ts";
 import {Result} from "./Result.ts";
 
 

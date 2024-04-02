@@ -1,8 +1,9 @@
 import {http} from "../http/http.ts";
-import {Data} from "../../domain/models/Data.ts";
+import {Data} from "../../domain/models/characters/Data.ts";
+import {RepositoriesInterface} from "./repositories.interface.tsx";
 
 
-export const CharacterRepository = {
+export const CharacterRepository: RepositoriesInterface<Data> = {
     getAll: async () => {
         return await http.get<Data>('https://rickandmortyapi.com/api/character')
     },

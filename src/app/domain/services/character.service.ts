@@ -1,8 +1,9 @@
-import {Data} from "../models/Data.ts";
+import {Data} from "../models/characters/Data.ts";
 import {CharacterRepository} from "../../infraestructure/repositories/character.repository.ts";
+import {RepositoriesInterface} from "../../infraestructure/repositories/repositories.interface.tsx";
 
 
-export const CharacterService = {
+export const CharacterService: RepositoriesInterface<Data> = {
     getAll: (): Promise<Data> => {
         return CharacterRepository.getAll();
     },

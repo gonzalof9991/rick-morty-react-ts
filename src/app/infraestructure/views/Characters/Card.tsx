@@ -1,10 +1,10 @@
-import {Result} from "../../../domain/models/Result.ts";
+import {Result} from "../../../domain/models/characters/Result.ts";
 
 type CardProps = {
-    character: Result;
+    item: Result;
 };
 export default function Card(
-    {character}: CardProps
+    {item}: CardProps
 ) {
     const itemCard =
         (label: string, value: any) => {
@@ -22,38 +22,44 @@ export default function Card(
     return (
         <li className={'dark:bg-gray-800 flex gap-x-2 shadow cursor-pointer transition-all ease-linear hover:scale-105'}>
             <figure>
-                <img alt={character.name} className={'w-40'} src={character.image}/>
+                <img alt={item.name} className={'w-40'} src={item.image}/>
             </figure>
             <div className={'pt-2'}>
                 <span className={'block dark:text-white'}>{
-                    character.name
+                    item?.name?.length > 20 ? item?.name?.slice(0, 20) + '...' : item?.name
                 }</span>
                 <div className={'flex gap-x-2'}>
                     <span className={
                         'block  text-xs p-1 rounded  font-medium'
-                        + (character.status === 'Alive' ? ' bg-green-50 text-green-800' : '')
-                        + (character.status === 'Dead' ? ' bg-red-50 text-red-800' : '')
-                        + (character.status === 'unknown' ? ' bg-gray-50 text-gray-800' :
+                        + (item.status === 'Alive' ? ' bg-green-50 text-green-800' : '')
+                        + (item.status === 'Dead' ? ' bg-red-50 text-red-800' : '')
+                        + (item.status === 'unknown' ? ' bg-gray-50 text-gray-800' :
                             'bg-slate-50 text-slate-800')
                     }>{
-                        character.status
+                        item.status
                     }</span>
                     <span className={
                         'block  text-xs p-1 rounded  font-medium'
-                        + (character.species === 'Alien' ? ' bg-indigo-50 text-indigo-800' : '')
-                        + (character.species === 'Human' ? ' bg-yellow-50 text-yellow-800' :
-                            'bg-slate-50 text-slate-800')
+                        + (item.gender === 'Male' ? ' bg-blue-50 text-blue-800' : '')
+                        + (item.gender === 'Female' ? ' bg-pink-50 text-pink-800' : '')
+                    }>{
+                        item.gender
+                    }</span>
+                    <span className={
+                        'block  text-xs p-1 rounded  font-medium bg-slate-50 text-slate-800'
+                        + (item.species === 'Alien' ? ' bg-indigo-50 text-indigo-800' : '')
+                        + (item.species === 'Human' ? ' bg-yellow-50 text-yellow-800' : '')
 
                     }>{
-                        character.species
+                        item.species
                     }</span>
 
                 </div>
                 {
-                    itemCard('Last known location:', character.location.name)
+                    itemCard('Last known location:', item.location.name)
                 }
                 {
-                    itemCard('Origin:', character.origin.name)
+                    itemCard('Origin:', item.origin.name)
                 }
             </div>
         </li>
