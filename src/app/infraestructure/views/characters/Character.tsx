@@ -1,9 +1,9 @@
 import {Data} from "../../../domain/models/characters/Data.ts";
-import {SearchContext, SearchContextType} from "../../components/Visualizer/VisualizerContext.tsx";
+import {SearchContext, SearchContextType} from "../../components/visualizer/VisualizerContext.tsx";
 import {Result} from "../../../domain/models/characters/Result.ts";
 import {CharacterService} from "../../../domain/services/character.service.ts";
 import Card from "./Card.tsx";
-import Visualizer from "../../components/Visualizer/Visualizer.tsx";
+import Visualizer from "../../components/visualizer/Visualizer.tsx";
 
 export default function Character() {
     const search = [
@@ -23,7 +23,7 @@ export default function Character() {
     return (
         <>
             <Visualizer<Data, SearchContextType, Result> Service={CharacterService} search={search}
-                                                         skeletonClass={'w-[410px] h-[160px]'}
+                                                         skeletonClass={'w-[160px] h-[260px] md:w-[466px] md:h-[160px]'}
                                                          context={SearchContext} Card={Card}/>
         </>
     )

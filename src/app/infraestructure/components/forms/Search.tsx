@@ -1,6 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {buildUrl, replaceQueryParams} from "../../../shared/utils/UrlUtils.tsx";
-import {SearchContext} from "../Visualizer/VisualizerContext.tsx";
+import {SearchContext} from "../visualizer/VisualizerContext.tsx";
+import {useDebounce} from "./hooks/UseDebounce.tsx";
 
 type SearchProps<T> = {
     onSearch: (data: T) => void;
@@ -15,19 +16,20 @@ export default function Search<T, >(
 ) {
     const [value, setValue] = useState<string>('');
     const {filters, setFilters} = useContext(SearchContext);
+    const debouncedValue = useDebounce(value, 500);
+    const isFirstRender = useRef(true);
     const updateFilters = () => {
         const key = replaceQueryParams(queryParams);
         setFilters(key, value);
     }
     const handleSearch = () => {
-        updateFilters();
+        //updateFilters();
         let search = '';
         if (filters.length === 0) {
             search = queryParams + value;
         } else {
             search = buildUrl(filters);
         }
-        console.log(search, 'search');
         postSearch(search)
             .then(onSearch);
     };
@@ -35,20 +37,19 @@ export default function Search<T, >(
         setValue(e.target.value);
     };
     useEffect(() => {
-        console.log(value, 'value');
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
         updateFilters();
-    }, [value]);
+        handleSearch();
+    }, [debouncedValue]);
     return (
-        <div className="flex justify-center items-center">
-            <input type="text" className="p-3 border border-gray-100 rounded shadow-xs"
-                   value={value}
-                   onChange={handleChange}
-                   onKeyPress={(e) => {
-                       if (e.key === 'Enter') {
-                           handleSearch();
-                       }
-                   }}
-                   placeholder={placeholder ?? 'Search'}/>
-        </div>
+
+        <input type="text" className="w-full p-6 md:w-max md:p-3 border border-gray-200 rounded shadow-xs"
+               value={value}
+               onChange={handleChange}
+               placeholder={placeholder ?? 'Search'}/>
+
     )
 }

@@ -1,8 +1,8 @@
 import {Data} from "../../../domain/models/locations/Data.ts";
-import {SearchContext, SearchContextType} from "../../components/Visualizer/VisualizerContext.tsx";
+import {SearchContext, SearchContextType} from "../../components/visualizer/VisualizerContext.tsx";
 import {Result} from "../../../domain/models/locations/Result.ts";
 import {LocationService} from "../../../domain/services/location.service.ts";
-import Visualizer from "../../components/Visualizer/Visualizer.tsx";
+import Visualizer from "../../components/visualizer/Visualizer.tsx";
 import Card from "./Card.tsx";
 
 export default function Location() {
@@ -24,7 +24,7 @@ export default function Location() {
         <>
             <Visualizer<Data, SearchContextType, Result> Service={LocationService} search={search}
                                                          skeletonClass={'w-[302-px] h-[160px]'}
-                                                         classes={'grid-cols-4'}
+                                                         classes={'md:grid-cols-4'}
                                                          context={SearchContext} Card={Card}/>
         </>
     )

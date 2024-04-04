@@ -1,8 +1,8 @@
 import {RepositoriesInterface} from "../../repositories/repositories.interface.tsx";
 import {SearchType} from "./Visualizer.interface.tsx";
 import {Context, JSX, useEffect, useState} from "react";
-import Search from "../Forms/Search.tsx";
-import ButtonPage from "../Buttons/ButtonPage.tsx";
+import Search from "../forms/Search.tsx";
+import ButtonPage from "../buttons/ButtonPage.tsx";
 import {FilterContextType} from "./VisualizerContext.tsx";
 
 export type VisualizerProps<T, C, I> = {
@@ -69,7 +69,7 @@ export default function Visualizer<T, C, I>({
             <context.Provider value={{
                 filters: filters ?? [], setFilters: handleFilters
             }}>
-                <div className={'flex justify-center items-center gap-x-2'}>
+                <div className={'flex-col w-full gap-y-4 flex justify-center md:flex-row items-center md:gap-x-2'}>
                     {
                         search.map((s, i) => (
                             <Search<T> key={i} postSearch={Service.getParams} onSearch={handleSearch}
@@ -77,12 +77,15 @@ export default function Visualizer<T, C, I>({
                         ))
                     }
                 </div>
-                <div className={'flex justify-end items-center gap-x-4 my-4'}>
-                    <ButtonPage onClick={handlePage} url={data?.info?.prev || ''} text={'Previous'}/>
-                    <ButtonPage onClick={handlePage} url={data?.info?.next || ''} text={'Next'}/>
+                <div className={'flex justify-center items-center gap-x-4 my-10 md:my-6 md:justify-end'}>
+                    <ButtonPage classes={'p-4 w-full ease-in duration-300 hover:bg-slate-50 md:p-3 md:w-32'} onClick={handlePage} url={data?.info?.prev || ''}
+                                text={'Previous'}/>
+                    <ButtonPage classes={'p-4 w-full ease-in duration-300 md:p-3 md:w-32 bg-indigo-500 hover:bg-indigo-700 text-white '} onClick={handlePage}
+                                url={data?.info?.next || ''}
+                                text={'Next'}/>
                 </div>
             </context.Provider>
-            <ul className={'grid grid-cols-3 gap-6 ' + classes}>
+            <ul className={'grid grid-cols-2 gap-6 md:grid-cols-3 justify-center ' + classes}>
                 {
                     (skeleton) ?
                         Array.from({length: 20}).map((_, index) => (

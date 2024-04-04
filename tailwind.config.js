@@ -10,11 +10,17 @@ export default {
     theme: {
         colors: {
             primary: '#666EE8',
-            secondary: '#6697E8',
-            warning: '#ff3838',
             ...colors,
         },
         extend: {},
+        screens: {
+            'xs': '375px',
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+            '2xl': '1536px',
+        }
     },
     plugins: [],
 }
