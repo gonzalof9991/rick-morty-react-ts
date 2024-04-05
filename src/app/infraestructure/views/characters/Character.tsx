@@ -1,5 +1,3 @@
-import {Data} from "../../../domain/models/characters/Data.ts";
-import {SearchContext, SearchContextType} from "../../components/visualizer/VisualizerContext.tsx";
 import {Result} from "../../../domain/models/characters/Result.ts";
 import {CharacterService} from "../../../domain/services/character.service.ts";
 import Card from "./Card.tsx";
@@ -22,9 +20,9 @@ export default function Character() {
     ]
     return (
         <>
-            <Visualizer<Data, SearchContextType, Result> Service={CharacterService} search={search}
-                                                         skeletonClass={'w-[160px] h-[260px] md:w-[466px] md:h-[160px]'}
-                                                         context={SearchContext} Card={Card}/>
+            <Visualizer<Result> Service={CharacterService} search={search}
+                                skeletonClass={'w-[160px] h-[260px] md:w-[466px] md:h-[160px]'}
+                                Card={Card}/>
         </>
     )
 }

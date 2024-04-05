@@ -1,27 +1,27 @@
 import {RepositoriesInterface} from "../../repositories/repositories.interface.tsx";
 import {SearchType} from "./Visualizer.interface.tsx";
-import {Context, JSX, useEffect, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import Search from "../forms/Search.tsx";
 import ButtonPage from "../buttons/ButtonPage.tsx";
-import {FilterContextType} from "./VisualizerContext.tsx";
+import {FilterContextType, SearchContext} from "./VisualizerContext.tsx";
+import {Data} from "../../../domain/models/Generic.ts";
 
-export type VisualizerProps<T, C, I> = {
-    Service: RepositoriesInterface<T>,
+
+export type VisualizerProps<I> = {
+    Service: RepositoriesInterface<Data<I>>,
     search: SearchType[],
-    context: Context<C>,
-    Card: (props: { item: I }) => JSX.Element,
+    Card: (props: { item: I, key?: unknown }) => JSX.Element,
     classes?: string,
     skeletonClass: string
 };
-export default function Visualizer<T, C, I>({
-                                                Service,
-                                                search,
-                                                context,
-                                                Card,
-                                                classes,
-                                                skeletonClass
-                                            }: VisualizerProps<T, C, I>): JSX.Element {
-    const [data, setData] = useState<T | null>(null);
+export default function Visualizer<I>({
+                                          Service,
+                                          search,
+                                          Card,
+                                          classes,
+                                          skeletonClass
+                                      }: VisualizerProps<I>): JSX.Element {
+    const [data, setData] = useState<Data<I>>({info: {count: 0, pages: 0, next: '', prev: null}, results: []});
     const [skeleton, setSkeleton] = useState<boolean>(true);
     const [filters, setFilters] = useState<FilterContextType[] | null>(null);
     const changeSkeleton = (value: boolean, ms: number) => {
@@ -29,7 +29,7 @@ export default function Visualizer<T, C, I>({
             setSkeleton(value);
         }, ms);
     };
-    const handleSearch = (values: T) => {
+    const handleSearch = (values: Data<I>) => {
         if (values.results.length === 0) {
             alert('No results found');
             return;
@@ -66,25 +66,28 @@ export default function Visualizer<T, C, I>({
     }, []);
     return (
         <>
-            <context.Provider value={{
+            <SearchContext.Provider value={{
                 filters: filters ?? [], setFilters: handleFilters
             }}>
                 <div className={'flex-col w-full gap-y-4 flex justify-center md:flex-row items-center md:gap-x-2'}>
                     {
                         search.map((s, i) => (
-                            <Search<T> key={i} postSearch={Service.getParams} onSearch={handleSearch}
-                                       queryParams={s.queryParams} placeholder={s.placeholder}/>
+                            <Search<Data<I>> key={i} postSearch={Service.getParams} onSearch={handleSearch}
+                                             queryParams={s.queryParams} placeholder={s.placeholder}/>
                         ))
                     }
                 </div>
                 <div className={'flex justify-center items-center gap-x-4 my-10 md:my-6 md:justify-end'}>
-                    <ButtonPage classes={'p-4 w-full ease-in duration-300 hover:bg-slate-50 md:p-3 md:w-32'} onClick={handlePage} url={data?.info?.prev || ''}
+                    <ButtonPage classes={'p-4 w-full ease-in duration-300 hover:bg-slate-50 md:p-3 md:w-32'}
+                                onClick={handlePage} url={data?.info?.prev || ''}
                                 text={'Previous'}/>
-                    <ButtonPage classes={'p-4 w-full ease-in duration-300 md:p-3 md:w-32 bg-indigo-500 hover:bg-indigo-700 text-white '} onClick={handlePage}
-                                url={data?.info?.next || ''}
-                                text={'Next'}/>
+                    <ButtonPage
+                        classes={'p-4 w-full ease-in duration-300 md:p-3 md:w-32 bg-indigo-500 hover:bg-indigo-700 text-white '}
+                        onClick={handlePage}
+                        url={data?.info?.next || ''}
+                        text={'Next'}/>
                 </div>
-            </context.Provider>
+            </SearchContext.Provider>
             <ul className={'grid grid-cols-2 gap-6 md:grid-cols-3 justify-center ' + classes}>
                 {
                     (skeleton) ?
@@ -93,8 +96,8 @@ export default function Visualizer<T, C, I>({
                                 className={'animate-pulse bg-gray-200 dark:bg-gray-800 ' + skeletonClass}>
                             </li>
                         )) :
-                        data?.results.map((item) => (
-                            <Card key={item.id} item={item}/>
+                        data?.results.map((item: I, index) => (
+                            <Card key={index} item={item}/>
                         ))
                 }
             </ul>
