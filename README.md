@@ -25,4 +25,4 @@ cd nombre-de-tu-proyecto
 npm install
 
 # Inicia la aplicación en modo de desarrollo
-npm start
+npm run dev
