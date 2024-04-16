@@ -1,13 +1,15 @@
 import {createContext} from "react";
 
+export type ContextGenericType<T> = {
+    filters: T[];
+    setFilters: (key: string, value: string) => void;
+}
+
 export type FilterContextType = {
     key: string;
     type: string;
     value: string;
     description?: string;
 }
-export type SearchContextType = {
-    filters: FilterContextType[];
-    setFilters: (key: string, value: string) => void;
-};
-export const SearchContext = createContext<SearchContextType>({} as SearchContextType);
+
+export const SearchContext = createContext<ContextGenericType<FilterContextType>>({} as ContextGenericType<FilterContextType>);

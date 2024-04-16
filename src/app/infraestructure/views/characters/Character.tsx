@@ -1,7 +1,7 @@
 import {Result} from "../../../domain/models/characters/Result.ts";
 import {CharacterService} from "../../../domain/services/character.service.ts";
-import Card from "./Card.tsx";
 import Visualizer from "../../components/visualizer/Visualizer.tsx";
+import Card from "../../components/card/Card.tsx";
 
 export default function Character() {
     const search = [
@@ -20,9 +20,11 @@ export default function Character() {
     ]
     return (
         <>
-            <Visualizer<Result> Service={CharacterService} search={search}
-                                skeletonClass={'w-[160px] h-[260px] md:w-[466px] md:h-[160px]'}
-                                Card={Card}/>
+            <Visualizer<Result>
+                schema={'character'}
+                Service={CharacterService} search={search}
+                skeletonClass={'w-[160px] h-[260px] md:w-[466px] md:h-[160px]'}
+                Card={Card}/>
         </>
     )
 }

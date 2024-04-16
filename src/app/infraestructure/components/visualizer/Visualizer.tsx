@@ -5,12 +5,15 @@ import Search from "../forms/Search.tsx";
 import ButtonPage from "../buttons/ButtonPage.tsx";
 import {FilterContextType, SearchContext} from "./VisualizerContext.tsx";
 import {Data} from "../../../domain/models/Generic.ts";
+import {Cardschema} from "../card/Card.tsx";
 
 
 export type VisualizerProps<I> = {
     Service: RepositoriesInterface<Data<I>>,
     search: SearchType[],
-    Card: (props: { item: I, key?: unknown }) => JSX.Element,
+    schema: Cardschema,
+    classesCard?: string,
+    Card: (props: { schema: Cardschema, classes?: string, item: I, key?: unknown }) => JSX.Element,
     classes?: string,
     skeletonClass: string
 };
@@ -19,11 +22,19 @@ export default function Visualizer<I>({
                                           search,
                                           Card,
                                           classes,
-                                          skeletonClass
+                                          skeletonClass,
+                                          schema,
+                                          classesCard
                                       }: VisualizerProps<I>): JSX.Element {
     const [data, setData] = useState<Data<I>>({info: {count: 0, pages: 0, next: '', prev: null}, results: []});
     const [skeleton, setSkeleton] = useState<boolean>(true);
     const [filters, setFilters] = useState<FilterContextType[] | null>(null);
+    const renderSearch = () => {
+        return search.map((s, i) => (
+            <Search<Data<I>> key={i} postSearch={Service.getParams} onSearch={handleSearch}
+                             queryParams={s.queryParams} placeholder={s.placeholder}/>
+        ))
+    }
     const changeSkeleton = (value: boolean, ms: number) => {
         setTimeout(() => {
             setSkeleton(value);
@@ -71,10 +82,7 @@ export default function Visualizer<I>({
             }}>
                 <div className={'flex-col w-full gap-y-4 flex justify-center md:flex-row items-center md:gap-x-2'}>
                     {
-                        search.map((s, i) => (
-                            <Search<Data<I>> key={i} postSearch={Service.getParams} onSearch={handleSearch}
-                                             queryParams={s.queryParams} placeholder={s.placeholder}/>
-                        ))
+                        renderSearch()
                     }
                 </div>
                 <div className={'flex justify-center items-center gap-x-4 my-10 md:my-6 md:justify-end'}>
@@ -97,7 +105,7 @@ export default function Visualizer<I>({
                             </li>
                         )) :
                         data?.results.map((item: I, index) => (
-                            <Card key={index} item={item}/>
+                            <Card schema={schema} classes={classesCard} key={index} item={item}/>
                         ))
                 }
             </ul>
