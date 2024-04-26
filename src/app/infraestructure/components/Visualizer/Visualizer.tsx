@@ -2,30 +2,34 @@ import {RepositoriesInterface} from "../../repositories/repositories.interface.t
 import {SearchType} from "./Visualizer.interface.tsx";
 import {JSX, useEffect, useState} from "react";
 import Search from "../forms/Search.tsx";
-import ButtonPage from "../buttons/ButtonPage.tsx";
+import ButtonPage from "../Buttons/ButtonPage.tsx";
 import {FilterContextType, SearchContext} from "./VisualizerContext.tsx";
 import {Data} from "../../../domain/models/Generic.ts";
-import {Cardschema} from "../card/Card.tsx";
+import {CardSchema} from "../Card/Card.tsx";
 
 
 export type VisualizerProps<I> = {
     Service: RepositoriesInterface<Data<I>>,
     search: SearchType[],
-    schema: Cardschema,
-    classesCard?: string,
-    Card: (props: { schema: Cardschema, classes?: string, item: I, key?: unknown }) => JSX.Element,
     classes?: string,
     skeletonClass: string
+    children?: JSX.Element
+    // Card
+    schema: CardSchema,
+    classesCard?: string,
+    Card: (props: { schema: CardSchema, classes?: string, item: I, key?: unknown, onClick: () => void }) => JSX.Element,
+    onClick?: (item: I) => void
 };
-export default function Visualizer<I>({
-                                          Service,
-                                          search,
-                                          Card,
-                                          classes,
-                                          skeletonClass,
-                                          schema,
-                                          classesCard
-                                      }: VisualizerProps<I>): JSX.Element {
+export default function Visualizer<I>(props: VisualizerProps<I>): JSX.Element {
+    const {
+        Service,
+        search,
+        Card,
+        classes,
+        skeletonClass,
+        schema,
+        classesCard
+    } = props;
     const [data, setData] = useState<Data<I>>({info: {count: 0, pages: 0, next: '', prev: null}, results: []});
     const [skeleton, setSkeleton] = useState<boolean>(true);
     const [filters, setFilters] = useState<FilterContextType[] | null>(null);
@@ -67,6 +71,8 @@ export default function Visualizer<I>({
                 changeSkeleton(false, 2000);
             });
     };
+
+
     useEffect(() => {
         Service.getAll().then((data) => {
             setData(data);
@@ -105,10 +111,18 @@ export default function Visualizer<I>({
                             </li>
                         )) :
                         data?.results.map((item: I, index) => (
-                            <Card schema={schema} classes={classesCard} key={index} item={item}/>
+
+                            <Card onClick={() => {
+                                if (props.onClick) props.onClick(item);
+                            }} schema={schema} classes={classesCard} key={index} item={item}/>
+
+
                         ))
                 }
             </ul>
+            {
+                props.children
+            }
         </>
 
     )

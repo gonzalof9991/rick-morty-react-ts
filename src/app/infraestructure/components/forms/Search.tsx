@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {buildUrl, replaceQueryParams} from "../../../shared/utils/UrlUtils.tsx";
-import {SearchContext} from "../visualizer/VisualizerContext.tsx";
+import {SearchContext} from "../Visualizer/VisualizerContext.tsx";
 import {useDebounce} from "./hooks/UseDebounce.tsx";
 
 type SearchProps<T> = {

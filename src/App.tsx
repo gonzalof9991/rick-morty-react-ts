@@ -1,7 +1,7 @@
 import './App.css'
 import Character from "./app/infraestructure/views/characters/Character.tsx";
 import Location from "./app/infraestructure/views/locations/Location.tsx";
-import Title from "./app/infraestructure/components/title/Title.tsx";
+import Title from "./app/infraestructure/components/Title/Title.tsx";
 import Episode from "./app/infraestructure/views/episodies/Episode.tsx";
 
 function App() {

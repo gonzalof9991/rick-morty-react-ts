@@ -1,4 +1,4 @@
-import {FilterContextType} from "../../infraestructure/components/visualizer/VisualizerContext.tsx";
+import {FilterContextType} from "../../infraestructure/components/Visualizer/VisualizerContext.tsx";
 
 
 export const buildUrl = (urls: FilterContextType[]) => {
