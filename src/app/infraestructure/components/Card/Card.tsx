@@ -1,33 +1,39 @@
 import {Gender, Location, Species, Status} from "../../../domain/models/characters/Result.ts";
+import {JSX} from "react";
 
 export type CardSchema = 'location' | 'character' | 'episode';
+
+export type ItemProps = {
+    id: number;
+    name: string;
+    status?: Status;
+    species?: Species;
+    type?: string;
+    gender?: Gender;
+    origin?: Location;
+    location?: Location;
+    image?: string;
+    episode?: string[] | string;
+    url: string;
+    created: Date;
+    // Episodies
+    air_date?: string;
+    characters?: string[];
+    // Locations
+    dimension?: string;
+    residents?: string[];
+};
+
 
 type CardProps = {
     schema: CardSchema;
     classes?: string;
-    item: {
-        id: number;
-        name: string;
-        status?: Status;
-        species?: Species;
-        type?: string;
-        gender?: Gender;
-        origin?: Location;
-        location?: Location;
-        image?: string;
-        episode?: string[] | string;
-        url: string;
-        created: Date;
-        // Episodies
-        air_date?: string;
-        characters?: string[];
-        // Locations
-        dimension?: string;
-        residents?: string[];
-    };
+    item: ItemProps;
     onClick?: () => void;
+    render?: JSX.Element;
 };
-export default function Card({schema, item, classes, onClick}: CardProps) {
+export default function Card(props: CardProps) {
+    const {schema, classes, item, onClick, render} = props;
     const renderImage = () => {
         if (schema !== 'character') {
             return null;
@@ -166,7 +172,7 @@ export default function Card({schema, item, classes, onClick}: CardProps) {
             onClick={() => {
                 onClick && onClick();
             }}
-            className={'dark:bg-gray-800 flex flex-col gap-x-2 shadow cursor-pointer transition-all ease-linear hover:scale-105 md:flex-row ' + classes
+            className={classes + ' dark:bg-gray-700 flex flex-col gap-x-2 shadow cursor-pointer transition-all ease-linear hover:scale-105 md:flex-row '
             }>
             {
                 renderImage()
@@ -185,6 +191,10 @@ export default function Card({schema, item, classes, onClick}: CardProps) {
 
                 {
                     renderLocation()
+                }
+
+                {
+                    render
                 }
 
             </div>

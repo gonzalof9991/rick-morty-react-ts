@@ -1,11 +1,10 @@
 import {RepositoriesInterface} from "../../repositories/repositories.interface.tsx";
-import {SearchType} from "./Visualizer.interface.tsx";
-import {JSX, useEffect, useState} from "react";
+import {SearchType} from "./Visualizer.interface.ts";
+import React, {JSX, useEffect, useState} from "react";
 import Search from "../forms/Search.tsx";
 import ButtonPage from "../Buttons/ButtonPage.tsx";
 import {FilterContextType, SearchContext} from "./VisualizerContext.tsx";
 import {Data} from "../../../domain/models/Generic.ts";
-import {CardSchema} from "../Card/Card.tsx";
 
 
 export type VisualizerProps<I> = {
@@ -13,22 +12,18 @@ export type VisualizerProps<I> = {
     search: SearchType[],
     classes?: string,
     skeletonClass: string
-    children?: JSX.Element
-    // Card
-    schema: CardSchema,
-    classesCard?: string,
-    Card: (props: { schema: CardSchema, classes?: string, item: I, key?: unknown, onClick: () => void }) => JSX.Element,
-    onClick?: (item: I) => void
+    onClick?: (item: I) => void,
+    children: React.ReactNode,
+    onChangeData?: (data: Data<I>) => void
 };
 export default function Visualizer<I>(props: VisualizerProps<I>): JSX.Element {
     const {
         Service,
         search,
-        Card,
+        children,
         classes,
         skeletonClass,
-        schema,
-        classesCard
+        onChangeData
     } = props;
     const [data, setData] = useState<Data<I>>({info: {count: 0, pages: 0, next: '', prev: null}, results: []});
     const [skeleton, setSkeleton] = useState<boolean>(true);
@@ -52,16 +47,19 @@ export default function Visualizer<I>(props: VisualizerProps<I>): JSX.Element {
         changeSkeleton(true, 0);
         setData(values);
         changeSkeleton(false, 2000);
+        if (onChangeData) onChangeData(values);
     };
     const handleFilters = (key: string, value: string) => {
-        const newFilters = filters ?? [];
-        const filter = newFilters.find((filter) => filter.key === key);
-        if (filter) {
-            filter.value = value;
-        } else {
-            newFilters.push({key, value, type: 'item'});
-        }
-        setFilters(newFilters);
+        setFilters(prevFilters => {
+            const newFilters = [...(prevFilters ?? [])];
+            const filter = newFilters.find(f => f.key === key);
+            if (filter) {
+                filter.value = value;
+            } else {
+                newFilters.push({key, value, type: 'item'});
+            }
+            return newFilters;
+        });
     };
 
     const handlePage = (url: string) => {
@@ -69,17 +67,22 @@ export default function Visualizer<I>(props: VisualizerProps<I>): JSX.Element {
         Service.getPage(url).then(setData)
             .finally(() => {
                 changeSkeleton(false, 2000);
+                if (onChangeData) onChangeData(data);
             });
     };
 
 
     useEffect(() => {
-        Service.getAll().then((data) => {
-            setData(data);
-        })
-            .finally(() => {
+        const getData = async () => {
+            try {
+                const result = await Service.getAll();
+                setData(result);
+                if (onChangeData) onChangeData(result);
+            } finally {
                 changeSkeleton(false, 2000);
-            });
+            }
+        };
+        getData().finally();
     }, []);
     return (
         <>
@@ -110,19 +113,10 @@ export default function Visualizer<I>(props: VisualizerProps<I>): JSX.Element {
                                 className={'animate-pulse bg-gray-200 dark:bg-gray-800 ' + skeletonClass}>
                             </li>
                         )) :
-                        data?.results.map((item: I, index) => (
-
-                            <Card onClick={() => {
-                                if (props.onClick) props.onClick(item);
-                            }} schema={schema} classes={classesCard} key={index} item={item}/>
-
-
-                        ))
+                        children
                 }
             </ul>
-            {
-                props.children
-            }
+
         </>
 
     )

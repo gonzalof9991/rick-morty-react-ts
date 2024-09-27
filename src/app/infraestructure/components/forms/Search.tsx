@@ -41,6 +41,7 @@ export default function Search<T, >(
             isFirstRender.current = false;
             return;
         }
+        console.log('Executing updateFilters and handleSearch');
         updateFilters();
         handleSearch();
     }, [debouncedValue]);
