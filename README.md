@@ -26,3 +26,10 @@ npm install
 
 # Inicia la aplicación en modo de desarrollo
 npm run dev
+
+```
+
+## Pendiente
+- La idea es separar la logica de los componentes
+- Que no se consuma el endpoint 3 veces en Search
+- Mejorar las fugas de renderizado

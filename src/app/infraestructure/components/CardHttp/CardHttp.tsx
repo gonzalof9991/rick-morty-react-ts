@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
-import Card, {CardSchema} from "../Card/Card.tsx";
+import Card, {CardSchema, ItemProps} from "../Card/Card.tsx";
+import {Skeleton} from "@mui/material";
 
 export interface CardHttpProps {
     endpoint: string;
@@ -28,9 +29,9 @@ export default function CardHttp<T>(props: CardHttpProps) {
     return (
         <>
             {skeleton ? (
-                <div className={'w-[160px] h-[260px] md:w-[466px] md:h-[160px] bg-gray-300 animate-pulse'}></div>
+                <Skeleton variant="rectangular" width={'full'} height={140}/>
             ) : (
-                <Card schema={schema as CardSchema} item={data} classes={classes}/>
+                <Card schema={schema as CardSchema} item={data as ItemProps} classes={classes}/>
             )}
         </>
     )
